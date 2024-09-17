@@ -1,48 +1,25 @@
-import { useDispatch, useSelector } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { persistor } from "../../redux/store";
-import { selectContacts } from "../../redux/contactsSlice";
-import { selectNameFilter, changeFilter } from "../../redux/filtersSlice";
-import { addContact, deleteContact } from "../../redux/contactsSlice";
-
-import ContactForm from "../ContactsForm/ContactsForm";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchContacts } from "../../redux/contactsOps";
 import ContactList from "../ContactList/ContactList";
-import SearchBox from "../SearchBox/SearchBox";
-import styles from "./App.module.css";
+import ContactForm from "../ContactsForm/ContactsForm";
+import Filter from "../Filter/Filter";
 
 const App = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
-  const filter = useSelector(selectNameFilter);
 
-  const handleAddContact = (newContact) => {
-    dispatch(addContact(newContact));
-  };
-
-  const handleDeleteContact = (id) => {
-    dispatch(deleteContact(id));
-  };
-
-  const handleFilterChange = (e) => {
-    dispatch(changeFilter(e.target.value));
-  };
-
-  const filteredContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
-    <PersistGate loading={null} persistor={persistor}>
-      <div className={styles.container}>
-        <h1>Phonebook</h1>
-        <ContactForm onSubmit={handleAddContact} />
-        <SearchBox value={filter} onChange={handleFilterChange} />
-        <ContactList
-          contacts={filteredContacts}
-          onDelete={handleDeleteContact}
-        />
-      </div>
-    </PersistGate>
+    <>
+      <h1>Phonebook</h1>
+      <ContactForm />
+      <h2>Contacts</h2>
+      <Filter />
+      <ContactList />
+    </>
   );
 };
 
