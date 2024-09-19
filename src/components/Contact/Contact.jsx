@@ -7,13 +7,11 @@ const Contact = ({ id, name, number }) => {
   const dispatch = useDispatch();
 
   return (
-    <li className={styles.contact}>
+    <li className={styles.item}>
       <p>
         {name}: {number}
       </p>
-      <button type="button" onClick={() => dispatch(deleteContact(id))}>
-        Delete
-      </button>
+      <button onClick={() => dispatch(deleteContact(id))}>Delete</button>
     </li>
   );
 };
